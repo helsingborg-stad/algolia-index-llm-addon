@@ -16,8 +16,8 @@ module.exports = {
      * Add your entry files here
      */
     entry: {
-        'js/{{BPREPLACESLUG}}': './source/js/{{BPREPLACESLUG}}.js',
-        'css/{{BPREPLACESLUG}}': './source/sass/{{BPREPLACESLUG}}.scss',
+        'js/algolia-index-llm-addon': './source/js/algolia-index-llm-addon.js',
+        'css/algolia-index-llm-addon': './source/sass/algolia-index-llm-addon.scss',
     },
     
     /**

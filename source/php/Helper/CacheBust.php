@@ -1,6 +1,6 @@
 <?php
 
-namespace {{BPREPLACENAMESPACE}}\Helper;
+namespace AlgoliaIndexLLMAddon\Helper;
 
 class CacheBust
 {
@@ -11,8 +11,8 @@ class CacheBust
      */
     public function name($name)
     {
-        $jsonPath = {{BPREPLACECAPSCONSTANT}}_PATH . apply_filters(
-            '{{BPREPLACENAMESPACE}}/Helper/CacheBust/RevManifestPath',
+        $jsonPath = ALGOLIA_INDEX_LLM_ADDON_PATH . apply_filters(
+            'AlgoliaIndexLLMAddon/Helper/CacheBust/RevManifestPath',
             'dist/manifest.json'
         );
 
@@ -20,7 +20,7 @@ class CacheBust
         if (file_exists($jsonPath)) {
             $revManifest = json_decode(file_get_contents($jsonPath), true);
         } elseif ($this->isDebug()) {
-            echo '<div style="color:red">Error: Assets not built. Go to ' . {{BPREPLACECAPSCONSTANT}}_PATH . ' and run gulp. See ' . {{BPREPLACECAPSCONSTANT}}_PATH . 'README.md for more info.</div>';
+            echo '<div style="color:red">Error: Assets not built. Go to ' . ALGOLIA_INDEX_LLM_ADDON_PATH . ' and run gulp. See ' . ALGOLIA_INDEX_LLM_ADDON_PATH . 'README.md for more info.</div>';
         }
 
         if (!isset($revManifest[$name])) {

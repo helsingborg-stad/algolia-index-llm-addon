@@ -1,6 +1,6 @@
 <?php
 
-namespace {{BPREPLACENAMESPACE}};
+namespace AlgoliaIndexLLMAddon;
 
 class App
 {
@@ -9,7 +9,7 @@ class App
         add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
         add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
 
-        $this->cacheBust = new \{{BPREPLACENAMESPACE}}\Helper\CacheBust();
+        $this->cacheBust = new \AlgoliaIndexLLMAddon\Helper\CacheBust();
     }
 
     /**
@@ -19,12 +19,12 @@ class App
     public function enqueueStyles()
     {
         wp_register_style(
-            '{{BPREPLACESLUG}}-css',
-            {{BPREPLACECAPSCONSTANT}}_URL . '/dist/' .
-            $this->cacheBust->name('css/{{BPREPLACESLUG}}.css')
+            'algolia-index-llm-addon-css',
+            ALGOLIA_INDEX_LLM_ADDON_URL . '/dist/' .
+            $this->cacheBust->name('css/algolia-index-llm-addon.css')
         );
 
-        wp_enqueue_style('{{BPREPLACESLUG}}-css');
+        wp_enqueue_style('algolia-index-llm-addon-css');
     }
 
     /**
@@ -34,11 +34,11 @@ class App
     public function enqueueScripts()
     {
         wp_register_script(
-            '{{BPREPLACESLUG}}-js',
-            {{BPREPLACECAPSCONSTANT}}_URL . '/dist/' .
-            $this->cacheBust->name('js/{{BPREPLACESLUG}}.js')
+            'algolia-index-llm-addon-js',
+            ALGOLIA_INDEX_LLM_ADDON_URL . '/dist/' .
+            $this->cacheBust->name('js/algolia-index-llm-addon.js')
         );
 
-        wp_enqueue_script('{{BPREPLACESLUG}}-js');
+        wp_enqueue_script('algolia-index-llm-addon-js');
     }
 }
