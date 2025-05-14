@@ -14,7 +14,7 @@ class FakeStreamProvider implements LLMStream
         $this->chunkSize = $chunkSize;
     }
 
-    public function stream( Prompt $prompt ): void
+    public function stream( Prompt $prompt, callable $onChunk ): void
     {
 
         $messages = \json_encode( $prompt->toMessages() );
@@ -25,9 +25,7 @@ class FakeStreamProvider implements LLMStream
             $part      = mb_substr( $remaining, 0, $this->chunkSize, 'UTF-8' );
             $remaining = mb_substr( $remaining, $this->chunkSize, null, 'UTF-8' );
 
-            echo $part;
-            @ob_flush();
-            @flush();
+            $onChunk( $part );
             usleep( 1_000 );
         }
     }

@@ -60,10 +60,18 @@ class API
     
         $this->llm->stream( 
             $this->template->toPrompt( 
-                $query, $data
-            )
+                $query, $data,
+            ),
+            fn($chunk) => $this->onChunk( $chunk ),
         );
     
         exit;
+    }
+
+    private function onChunk( string $chunk ): void
+    {
+        echo $chunk;
+        ob_flush();
+        flush();
     }
 }

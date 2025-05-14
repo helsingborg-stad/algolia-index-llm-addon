@@ -6,5 +6,5 @@ use AlgoliaIndexLLMAddon\Interfaces\Prompt;
 
 interface LLMStream
 {
-    public function stream( Prompt $prompt): void;
+    public function stream( Prompt $prompt, callable $onChunk): void;
 }

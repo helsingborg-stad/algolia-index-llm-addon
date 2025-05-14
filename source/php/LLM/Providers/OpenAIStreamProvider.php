@@ -19,7 +19,7 @@ class OpenAIStreamProvider implements LLMStream
         $this->temperature = $settings['temperature'] ?? $this->temperature;
     }
 
-    public function stream(Prompt $prompt): void
+    public function stream(Prompt $prompt, callable $onChunk): void
     {
         $ch = curl_init('https://api.openai.com/v1/chat/completions');
         $payload = json_encode([
@@ -39,7 +39,7 @@ class OpenAIStreamProvider implements LLMStream
             ],
             CURLOPT_POST          => true,
             CURLOPT_POSTFIELDS    => $payload,
-            CURLOPT_WRITEFUNCTION => function($curl, $chunk) use (&$sseBuf) {
+            CURLOPT_WRITEFUNCTION => function($curl, $chunk) use (&$sseBuf, $onChunk) {
                 $sseBuf .= $chunk;
 
                 // process each complete SSE frame
@@ -63,9 +63,7 @@ class OpenAIStreamProvider implements LLMStream
                         }
 
                         // **Immediately** emit whatever delta we got
-                        echo $delta;
-                        @ob_flush();
-                        @flush();
+                        $onChunk($delta);
                     }
                 }
 
