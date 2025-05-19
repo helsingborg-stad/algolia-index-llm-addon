@@ -2,17 +2,17 @@
 
 namespace AlgoliaIndexLLMAddon\LLM;
 
+use AlgoliaIndexLLMAddon\Helper\Options;
 use AlgoliaIndexLLMAddon\Interfaces\LLMStream;
 use AlgoliaIndexLLMAddon\LLM\Providers\FakeStreamProvider;
 use AlgoliaIndexLLMAddon\LLM\Providers\OpenAIStreamProvider;
 
 class StreamFactory
 {
-    public static function createFromEnv(): LLMStream
+    public static function createFromEnv(Options $options = new Options()): LLMStream
     {
-        $useFake = 1;
-        return $useFake
+        return $options->useFakeStreamProvider()
             ? new FakeStreamProvider(10)
-            : new OpenAIStreamProvider(OPENAI_API_KEY );
+            : new OpenAIStreamProvider($options->openAiApiKey() );
     }
 }
