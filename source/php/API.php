@@ -71,7 +71,6 @@ class API
     private function onChunk( string $chunk ): void
     {
         echo $chunk;
-        ob_flush();
         flush();
     }
 }

@@ -17,10 +17,12 @@ class OpenAIStreamProvider implements LLMStream
         $this->apiKey      = $apiKey;
         $this->model       = $settings['model'] ?? $this->model;
         $this->temperature = $settings['temperature'] ?? $this->temperature;
+
     }
 
     public function stream(Prompt $prompt, callable $onChunk): void
     {
+
         $ch = curl_init('https://api.openai.com/v1/chat/completions');
         $payload = json_encode([
             'model'       => $this->model,
@@ -31,6 +33,7 @@ class OpenAIStreamProvider implements LLMStream
 
         // Buffer to accumulate partial SSE frames
         $sseBuf = '';
+  
 
         curl_setopt_array($ch, [
             CURLOPT_HTTPHEADER    => [
@@ -86,9 +89,7 @@ class OpenAIStreamProvider implements LLMStream
                     $json  = json_decode($raw, true);
                     $delta = $json['choices'][0]['delta']['content'] ?? '';
                     if ($delta !== '') {
-                        echo $delta;
-                        @ob_flush();
-                        @flush();
+                        $onChunk($delta);
                     }
                 }
             }
