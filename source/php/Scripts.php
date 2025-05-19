@@ -3,14 +3,18 @@
 namespace AlgoliaIndexLLMAddon;
 
 use AlgoliaIndexLLMAddon\Helper\CacheBust;
+use AlgoliaIndexLLMAddon\Helper\Options;
 
 class Scripts
 {
     private CacheBust $cacheBust;
+
+    private Options $options;
     
-    public function __construct(CacheBust $cacheBust)
+    public function __construct(CacheBust $cacheBust, ?Options $options = null)
     {
         $this->cacheBust = $cacheBust;
+        $this->options = $options ?: new Options();
         
         add_action( 'wp_enqueue_scripts', [ $this, 'enqueueScripts' ] );
     }
@@ -41,7 +45,7 @@ class Scripts
      */
     public function enqueueScripts()
     {
-        if (!is_search()) {
+        if (!is_search() || \is_paged() || $this->options->isDisabled()) {
             return;
         }
 
@@ -54,7 +58,17 @@ class Scripts
         wp_localize_script( 'algolia-index-llm-addon-js', 'LLMSettings', [
             'apiUrl' => esc_url_raw( rest_url( 'llm/v1/stream' ) ),
             'nonce'  => wp_create_nonce( 'wp_rest' ),
-        ] );
+            'isDisabled' => $this->options->isDisabled(),
+            'algoliaIndex' => $this->options->algoliaIndex(),
+            'algoliaAppId' => $this->options->algoliaAppId(),
+            'algoliaSearchApiKey' =>  $this->options->algoliaSearchApiKey(),
+            'typesenseSearchApiKey' => $this->options->typesenseSearchApiKey(),
+            'typesenseUrl' => $this->options->typesenseUrl(),
+            'typesenseCollection' =>  $this->options->typesenseCollection(),
+            'enableMatomo' =>  $this->options->enableMatomo(),
+            'dataLoader' =>  $this->options->dataLoader(),
+            'algoliaIndexJsAddonIsEnabled' => $this->options->algoliaIndexJsAddonIsEnabled(),
+        ]);
 
         wp_enqueue_script('algolia-index-llm-addon-js');
     }
